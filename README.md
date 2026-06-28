@@ -53,9 +53,18 @@ Server  →  App : {"type": "handshake", "status": "ok"}
 ---
 
 ## App States
+
+**Connect Screen:**
 ```
-DISCONNECTED → CONNECTED → RECORDING → PAUSED → RECORDING → STOPPED
-                                ↑ auto-pause on call/background
+IDLE → CONNECTING → CONNECTED → (navigate to Recording Screen)
+                 ↘ ERROR
+```
+
+**Recording Screen:**
+```
+IDLE → RECORDING → PAUSED → RECORDING → IDLE
+              ↘ ERROR
+              ↑ auto-pause on call/background
 ```
 
 ---
@@ -67,14 +76,17 @@ com.rpd.data/
 ├── MainActivity.kt
 ├── navigation/
 │   └── AppNavigation.kt
-├── ui/
-│   └── connect/
-│       ├── ConnectScreen.kt
-│       └── ConnectViewModel.kt
+├── model/
+│   └── Messages.kt
 ├── network/
 │   └── WebSocketManager.kt
-└── model/
-    └── Messages.kt
+└── ui/
+    ├── connect/
+    │   ├── ConnectScreen.kt
+    │   └── ConnectViewModel.kt
+    └── recording/
+        ├── RecordingScreen.kt
+        └── RecordingViewModel.kt
 ```
 
 ---
@@ -86,3 +98,18 @@ com.rpd.data/
 - Gyroscope + Accelerometer sensors
 
 ---
+
+## Current Status
+
+- [x] Messages.kt
+- [x] WebSocketManager.kt
+- [x] ConnectViewModel.kt
+- [x] AppNavigation.kt
+- [ ] MainActivity.kt
+- [ ] ConnectScreen.kt
+- [ ] RecordingScreen.kt
+- [ ] RecordingViewModel.kt
+- [ ] Sensor streaming
+- [ ] Gripper control
+- [ ] Auto-pause on interruption
+- [ ] Sensor fusion
