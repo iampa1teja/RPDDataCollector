@@ -7,6 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
+import com.rpd.data.navigation.AppNavigation
 import com.rpd.data.ui.theme.RPDDataCollectorTheme
 
 class MainActivity : ComponentActivity() {
@@ -16,7 +17,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             RPDDataCollectorTheme {
                 Surface(modifier  = Modifier.fillMaxSize()) {
-
+                    AppNavigation()
                 }
             }
         }
