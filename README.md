@@ -9,7 +9,7 @@ Android app for recording robot motion data using smartphone IMU sensors, stream
 
 ## What It Does
 
-Uses your phone's gyroscope + accelerometer to capture motion data during robot teleoperation and streams it to a Python server ([rpd-lib](link-to-python-repo)) running on your PC.
+Uses your phone's gyroscope + accelerometer to capture motion data during robot teleoperation and streams it to a Python server running on your PC.
 
 ---
 
