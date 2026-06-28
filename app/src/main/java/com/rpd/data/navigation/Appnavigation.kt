@@ -6,6 +6,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.rpd.data.ui.connect.ConnectScreen
 import com.rpd.data.ui.recording.RecordingScreen
+import com.rpd.data.ui.recording.RecordingViewModel
 
 object Routes {
     const val CONNECT = "connect"
@@ -13,7 +14,7 @@ object Routes {
 }
 
 @Composable
-fun AppNavigation() {
+fun AppNavigation(recordingViewModel: RecordingViewModel) {
     val navController = rememberNavController()
     NavHost(
         navController = navController,
@@ -24,7 +25,7 @@ fun AppNavigation() {
         }
 
         composable(Routes.RECORDING) {
-            RecordingScreen(navController)
+            RecordingScreen(navController, recordingViewModel)
         }
     }
 }

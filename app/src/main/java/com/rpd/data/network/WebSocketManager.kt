@@ -3,6 +3,7 @@ package com.rpd.data.network
 import com.rpd.data.model.HandshakeRequest
 import com.rpd.data.model.HandshakeResponse
 import io.ktor.client.HttpClient
+import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.client.plugins.websocket.WebSockets
 import io.ktor.client.plugins.websocket.webSocketSession
 import io.ktor.websocket.CloseReason
@@ -23,7 +24,7 @@ sealed class ConnectionState {
 }
 
 object WebSocketManager {
-    private val client = HttpClient {
+    private val client = HttpClient(OkHttp) {
         install(WebSockets)
     }
     private var session: WebSocketSession? = null
