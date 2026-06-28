@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
+import kotlin.coroutines.cancellation.CancellationException
 
 sealed class RecordUiState {
     data object IDLE : RecordUiState()
@@ -33,7 +34,10 @@ class RecordingViewModel : ViewModel() {
                     WebSocketManager.sendMessage(json)
                 }
             } catch (e: Exception) {
+                if (e is CancellationException) throw e
                 _recordingUiState.value = RecordUiState.Error(e.message ?: "Unknown Error")
+            } finally {
+                sensorJob = null
             }
         }
     }

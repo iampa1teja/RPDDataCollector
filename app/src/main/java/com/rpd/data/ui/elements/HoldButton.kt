@@ -16,7 +16,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.Job
@@ -56,12 +56,17 @@ fun HoldButton(
                             progress = 0f
                             holdJob = scope.launch {
                                 repeat(60) {
-                                    delay(50.milliseconds)
-                                    progress += 50f / 3000f
-                                    if (progress >= 1f) {
-                                        progress = 1f
-                                        onHoldComplete()
-                                        return@launch
+                                    val startTime = System.currentTimeMillis()
+                                    val duration = 3000L
+                                    while (true) {
+                                        delay(50.milliseconds)
+                                        val elapsed = System.currentTimeMillis() - startTime
+                                        progress = (elapsed.toFloat() / duration).coerceAtMost(1f)
+                                        if (elapsed >= duration) {
+                                            progress = 1f
+                                            onHoldComplete()
+                                            return@launch
+                                        }
                                     }
                                 }
                             }
@@ -74,20 +79,13 @@ fun HoldButton(
                     )
                 }
         ) {
-            drawCircle(
-                color = idleColor,
-                style = Stroke(
-                    width = 8.dp.toPx()
-                )
-            )
+            drawCircle(color = idleColor)
             drawArc(
                 color = activeColor,
                 startAngle = -90f,
                 sweepAngle = animatedProgress * 360f,
-                useCenter = false,
-                style = Stroke(
-                    width = 8.dp.toPx()
-                )
+                useCenter = true,
+                style = Fill
             )
         }
         Text(text = label)

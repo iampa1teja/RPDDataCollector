@@ -1,5 +1,6 @@
 package com.rpd.data.network
 
+import android.util.Log
 import com.rpd.data.model.HandshakeRequest
 import com.rpd.data.model.HandshakeResponse
 import io.ktor.client.HttpClient
@@ -34,15 +35,12 @@ object WebSocketManager {
     val connectionState: StateFlow<ConnectionState> =
         _connectionState.asStateFlow()
 
-    suspend fun connect(url: String) {
-        try {
-            session = client.webSocketSession(urlString = url)
-            _connectionState.value = ConnectionState.CONNECTED
+    private val json = Json { encodeDefaults = true }
 
-        } catch (e: Exception) {
-            _connectionState.value =
-                ConnectionState.Error(e.message ?: "Unknown error")
-        }
+    suspend fun connect(url: String) {
+        _connectionState.value = ConnectionState.CONNECTING
+        session = client.webSocketSession(urlString = url)
+        _connectionState.value = ConnectionState.CONNECTED
     }
 
     suspend fun sendHandshake() {
@@ -50,8 +48,9 @@ object WebSocketManager {
             ?: throw IllegalStateException("Not connected")
 
         val request = HandshakeRequest()
-        val json = Json.encodeToString<HandshakeRequest>(request)
+        val json = this.json.encodeToString<HandshakeRequest>(request)
 
+        Log.d("WebSocketManager", "Sending handshake: $json")
         currentSession.send(Frame.Text(json))
     }
 
@@ -61,7 +60,7 @@ object WebSocketManager {
 
         val frame = currentSession.incoming.receive() as Frame.Text
 
-        return Json.decodeFromString(frame.readText())
+        return this.json.decodeFromString(frame.readText())
     }
 
     suspend fun sendMessage(message: String) {
